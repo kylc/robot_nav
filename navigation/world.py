@@ -3,9 +3,11 @@ SEARCH_VECS = [
     (-1, 0), (-1, -1), (0, -1), (1, -1)
     ]
 
-class WallMap(object):
-  def __init__(self, data):
+class World(object):
+  def __init__(self, data, width, height):
     self.data = data
+    self.width = width
+    self.height = height
 
   def set_occupied(self, (x, y), v):
     self.data[x][y] = v
