@@ -21,22 +21,24 @@ pygame.display.set_caption("Visualization")
 background = pygame.Surface(screen.get_size())
 background = background.convert()
 
+# Draw the map
+for i, row in enumerate(world.data):
+  for j, col in enumerate(row):
+    if col:
+      background.fill(WALL_COLOR, rect=(i, j, 1, 1))
+    else:
+      background.fill(BG_COLOR, rect=(i, j, 1, 1))
+
 clock = pygame.time.Clock()
 while True:
   clock.tick(60)
 
-  # Draw the map
-  for i, row in enumerate(world.data):
-    for j, col in enumerate(row):
-      if col:
-        background.fill(WALL_COLOR, rect=(i, j, 1, 1))
-      else:
-        background.fill(BG_COLOR, rect=(i, j, 1, 1))
-
   # Draw the robot
-  background.fill(OBJ_COLOR, rect=((x - 5), (y - 5), 10, 10))
+  screen.blit(background, (0, 0))
+  screen.fill(OBJ_COLOR, rect=((x - 5), (y - 5), 10, 10))
 
   world.set_occupied((x, y), True)
+  background.fill(WALL_COLOR, rect=(x, y, 1, 1))
 
   # Make the next movement
   (dx, dy) = w.next_move(world, (x, y), 200)
@@ -45,6 +47,4 @@ while True:
   if dy > 0: y += 1
   elif dy < 0: y -= 1
 
-
-  screen.blit(background, (0, 0))
   pygame.display.flip()
