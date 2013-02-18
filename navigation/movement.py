@@ -10,7 +10,8 @@ def threat_distance(wallmap, (x, y), (dx, dy), max_range):
 def repulsive_force((x0, y0), (xi, yi), const, dist, active, width):
     """Return the magnitude and direction of the repulsive force for a given
     cell."""
-    if not active: return (0, 0)
+    if not active:
+        return (0, 0)
     f = const * width / dist
     return ((xi - x0) * f, (yi - y0) * f)
 
