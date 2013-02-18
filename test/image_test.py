@@ -48,6 +48,6 @@ while True:
     pygame.draw.aaline(screen, PATH_COLOR, (x, y), (x + dx, y + dy))
 
     wallmap.set_occupied((x, y), True)
-    background.fill(WALL_COLOR, rect=(int(x), int(y), 1, 1))
+    background.fill(WALL_COLOR, rect=(x, y, 1, 1))
 
     pygame.display.flip()
