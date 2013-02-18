@@ -37,14 +37,16 @@ while True:
   screen.blit(background, (0, 0))
   screen.fill(OBJ_COLOR, rect=((x - 5), (y - 5), 10, 10))
 
-  world.set_occupied((x, y), True)
-  background.fill(WALL_COLOR, rect=(x, y, 1, 1))
-
   # Make the next movement
   (dx, dy) = w.next_move(world, (x, y), 200)
   if dx > 0: x += 1
   elif dx < 0: x -= 1
   if dy > 0: y += 1
   elif dy < 0: y -= 1
+
+  pygame.draw.aaline(screen, (0, 255, 0), (x, y), (x + dx, y + dy))
+
+  world.set_occupied((x, y), True)
+  background.fill(WALL_COLOR, rect=(int(x), int(y), 1, 1))
 
   pygame.display.flip()
