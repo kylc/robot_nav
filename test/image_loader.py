@@ -2,6 +2,7 @@ import Image
 from navigation import world
 
 def load_image(fname):
+    """Load a World from an image file."""
     data = []
     image = Image.open(fname)
     (width, height) = image.size
