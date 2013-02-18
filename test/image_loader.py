@@ -1,5 +1,5 @@
 import Image
-from navigation.world import *
+from navigation import world
 
 def load_image(fname):
     data = []
@@ -10,4 +10,4 @@ def load_image(fname):
         for y in xrange(0, height):
             val = True if image.getpixel((x, y)) == (255, 255, 255) else False
             data[x].append(val)
-    return World(data, width, height)
+    return world.World(data, width, height)

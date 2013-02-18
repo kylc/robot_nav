@@ -2,27 +2,27 @@ import sys
 import time
 import pygame
 import image_loader
-from navigation import world as w
+from navigation import world, movement
 
 BG_COLOR = (0, 0, 0)
 WALL_COLOR = (255, 255, 255)
 OBJ_COLOR = (255, 0, 0)
 
 # Load the world from image data
-world = image_loader.load_image(sys.argv[1])
+wallmap = image_loader.load_image(sys.argv[1])
 
 # Set our initial x and y coordinates
 (x, y) = (10, 50)
 
 pygame.init()
-screen = pygame.display.set_mode((world.width, world.height))
+screen = pygame.display.set_mode((wallmap.width, wallmap.height))
 pygame.display.set_caption("Visualization")
 
 background = pygame.Surface(screen.get_size())
 background = background.convert()
 
 # Draw the map
-for i, row in enumerate(world.data):
+for i, row in enumerate(wallmap.data):
     for j, col in enumerate(row):
         if col:
             background.fill(WALL_COLOR, rect=(i, j, 1, 1))
@@ -38,7 +38,7 @@ while True:
     screen.fill(OBJ_COLOR, rect=((x - 5), (y - 5), 10, 10))
 
     # Make the next movement
-    (dx, dy) = w.next_move(world, (x, y), 200)
+    (dx, dy) = movement.next_move(wallmap, (x, y), 200)
     if dx > 0: x += 1
     elif dx < 0: x -= 1
     if dy > 0: y += 1
@@ -46,7 +46,7 @@ while True:
 
     pygame.draw.aaline(screen, (0, 255, 0), (x, y), (x + dx, y + dy))
 
-    world.set_occupied((x, y), True)
+    wallmap.set_occupied((x, y), True)
     background.fill(WALL_COLOR, rect=(int(x), int(y), 1, 1))
 
     pygame.display.flip()
