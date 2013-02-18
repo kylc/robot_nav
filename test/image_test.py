@@ -39,6 +39,9 @@ while True:
     screen.fill(OBJ_COLOR, rect=((x - 5), (y - 5), 10, 10))
 
     # Make the next movement
+    # TODO: Need to figure out how to move in each direction independently.
+    # This allows only for moving up/down, left/right, or diagonal, preventing
+    # the robot from following it's true desired path.
     (dx, dy) = movement.next_move(wallmap, (x, y), 200)
     if dx > 0: x += 1
     elif dx < 0: x -= 1
