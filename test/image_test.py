@@ -5,6 +5,7 @@ import image_loader
 from navigation import world, movement
 
 BG_COLOR = (0, 0, 0)
+PATH_COLOR = (0, 255, 0)
 WALL_COLOR = (255, 255, 255)
 OBJ_COLOR = (255, 0, 0)
 
@@ -44,7 +45,7 @@ while True:
     if dy > 0: y += 1
     elif dy < 0: y -= 1
 
-    pygame.draw.aaline(screen, (0, 255, 0), (x, y), (x + dx, y + dy))
+    pygame.draw.aaline(screen, PATH_COLOR, (x, y), (x + dx, y + dy))
 
     wallmap.set_occupied((x, y), True)
     background.fill(WALL_COLOR, rect=(int(x), int(y), 1, 1))
