@@ -9,6 +9,7 @@ def load_image(fname):
     for x in xrange(0, width):
         data.append([])
         for y in xrange(0, height):
-            val = True if image.getpixel((x, y)) == (255, 255, 255) else False
+            # TODO: Handle RGB and RGBA images
+            val = image.getpixel((x, y)) == (255, 255, 255, 255)
             data[x].append(val)
     return world.World(data, width, height)
