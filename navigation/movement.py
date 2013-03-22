@@ -23,7 +23,7 @@ def next_move(wallmap, (x, y), max_range):
         d = math.radians(t)
         (x_dir, y_dir) = (math.cos(d), math.sin(d))
         dist = threat_distance(wallmap, (x, y), (x_dir, y_dir), max_range)
-        if dist > 0:
+        if dist != -1:
             x_sum += dist * x_dir
             y_sum += dist * y_dir
     return (x_sum, y_sum)
