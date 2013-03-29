@@ -1,7 +1,7 @@
 import sys
 import pygame
 import image_loader
-from navigation import movement
+from navigation import movement, world
 
 BG_COLOR = (0, 0, 0)
 PATH_COLOR = (0, 255, 0)
