@@ -3,16 +3,29 @@ class World(object):
     EMPTY = 2
     UNKNOWN = 3
 
+    @classmethod
+    def make_unknown_map(cls, width, height):
+        data = []
+        for x in xrange(0, width):
+            data.append([])
+            for y in xrange(0, height):
+                data[x].append(World.UNKNOWN)
+        return World(data, width, height)
+
     def __init__(self, data, width, height):
         self.data = data
         self.width = width
         self.height = height
 
-    def set_empty(self, (x, y), v):
+
+    def set_empty(self, (x, y)):
         self.data[x][y] = World.EMPTY
 
-    def set_occupied(self, (x, y), v):
+    def set_occupied(self, (x, y)):
         self.data[x][y] = World.OCCUPIED
+
+    def set_unknown(self, (x, y)):
+        self.data[x][y] = World.UNKNOWN
 
     def occupied(self, (x, y)):
         return self.get_value((x, y)) == World.OCCUPIED
@@ -30,3 +43,9 @@ class World(object):
             # We assume all out-of-bounds regions are occupied.
             return World.OCCUPIED
         return self.data[x][y] 
+
+    def set_value(self, (x, y), v):
+        if(x >= len(self.data) or y >= len(self.data[0])):
+            return
+
+        self.data[x][y] = v
