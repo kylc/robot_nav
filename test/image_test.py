@@ -13,6 +13,8 @@ wallmap = image_loader.load_image(sys.argv[1])
 
 # Set our initial x and y coordinates
 (x, y) = (10, 50)
+(finish_x, finish_y) = (20, 280)
+targets = [(finish_x, finish_y)]
 
 pygame.init()
 screen = pygame.display.set_mode((wallmap.width, wallmap.height))
@@ -41,7 +43,7 @@ while True:
     # TODO: Need to figure out how to move in each direction independently.
     # This allows only for moving up/down, left/right, or diagonal, preventing
     # the robot from following it's true desired path.
-    (dx, dy) = movement.next_move(wallmap, (x, y), 200)
+    (dx, dy) = movement.next_move(wallmap, (x, y), 200, targets)
     if dx > 0: x += 1
     elif dx < 0: x -= 1
     if dy > 0: y += 1
