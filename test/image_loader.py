@@ -11,5 +11,8 @@ def load_image(fname):
         for y in xrange(0, height):
             # TODO: Handle RGB and RGBA images
             val = image.getpixel((x, y)) == (255, 255, 255, 255)
-            data[x].append(val)
+            if val:
+                data[x].append(world.World.OCCUPIED)
+            else:
+                data[x].append(world.World.EMPTY)
     return world.World(data, width, height)

@@ -1,15 +1,20 @@
 import sys
 import pygame
 import image_loader
-from navigation import movement, world
+from navigation import movement
+from navigation.world import World
 
-BG_COLOR = (0, 0, 0)
+EMPTY_COLOR = (0, 0, 0)
+UNKNOWN_COLOR = (128, 128, 128)
+OCCUPIED_COLOR = (255, 255, 255)
+
 PATH_COLOR = (0, 255, 0)
-WALL_COLOR = (255, 255, 255)
 OBJ_COLOR = (255, 0, 0)
 
-# Load the world from image data
-wallmap = image_loader.load_image(sys.argv[1])
+# Load the world from image data.  We load the entire map (full_wallmap), but
+# only calculate our next move based on what we have seen (wallmap).
+full_wallmap = image_loader.load_image(sys.argv[1])
+wallmap = World.make_unknown_map(full_wallmap.width, full_wallmap.height)
 
 # Set our initial x and y coordinates
 (x, y) = (10, 50)
@@ -23,17 +28,31 @@ pygame.display.set_caption("Visualization")
 background = pygame.Surface(screen.get_size())
 background = background.convert()
 
+def draw_pixel((x, y), v):
+    if v == World.OCCUPIED:
+        background.fill(OCCUPIED_COLOR, rect=(i, j, 1, 1))
+    elif v == World.EMPTY:
+        background.fill(EMPTY_COLOR, rect=(i, j, 1, 1))
+    elif v == World.UNKNOWN:
+        background.fill(UNKNOWN_COLOR, rect=(i, j, 1, 1))
+
 # Draw the map
 for i, row in enumerate(wallmap.data):
     for j, col in enumerate(row):
-        if col:
-            background.fill(WALL_COLOR, rect=(i, j, 1, 1))
-        else:
-            background.fill(BG_COLOR, rect=(i, j, 1, 1))
+        draw_pixel((i, j), wallmap.data[i][j])
 
 clock = pygame.time.Clock()
 while True:
     clock.tick(60)
+
+    # Reveal the area around the robot
+    for i in xrange(x - 40, x + 40):
+        for j in xrange(y - 40, y + 40):
+            val = full_wallmap.get_value((i, j))
+            wallmap.set_value((i, j), val)
+
+            # Redraw the area
+            draw_pixel((i, j), val)
 
     # Draw the robot
     screen.blit(background, (0, 0))
@@ -43,7 +62,7 @@ while True:
     # TODO: Need to figure out how to move in each direction independently.
     # This allows only for moving up/down, left/right, or diagonal, preventing
     # the robot from following it's true desired path.
-    (dx, dy) = movement.next_move(wallmap, (x, y), 200, targets)
+    (dx, dy) = movement.next_move(wallmap, (x, y), 40, targets)
     if dx > 0: x += 1
     elif dx < 0: x -= 1
     if dy > 0: y += 1
@@ -51,7 +70,7 @@ while True:
 
     pygame.draw.aaline(screen, PATH_COLOR, (x, y), (x + dx, y + dy))
 
-    wallmap.set_occupied((x, y), True)
-    background.fill(WALL_COLOR, rect=(x, y, 1, 1))
+    wallmap.set_occupied((x, y))
+    background.fill(OCCUPIED_COLOR, rect=(x, y, 1, 1))
 
     pygame.display.flip()
