@@ -49,3 +49,6 @@ class World(object):
             return
 
         self.data[x][y] = v
+
+    def is_within_bounds(self, (x, y)):
+        return x > 0 and x < self.width and y > 0 and y < self.height
