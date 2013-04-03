@@ -58,6 +58,12 @@ while True:
     screen.blit(background, (0, 0))
     screen.fill(OBJ_COLOR, rect=((x - 5), (y - 5), 10, 10))
 
+    # Find the unknown regions so we can target them.
+    unknowns = movement.contiguous_unknowns(wallmap, (x, y), 100)
+    for (ux, uy) in unknowns:
+        pygame.draw.circle(screen, PATH_COLOR, (ux, uy), 2)
+    targets = unknowns # TODO: TODO: TODO:
+
     # Make the next movement
     # TODO: Need to figure out how to move in each direction independently.
     # This allows only for moving up/down, left/right, or diagonal, preventing
