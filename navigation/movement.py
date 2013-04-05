@@ -74,8 +74,8 @@ def next_move(wallmap, (x, y), max_range, targets):
     # research.
     for (target_x, target_y) in targets:
         dx, dy = target_x - x, target_y - y
-        x_sum += dx
-        y_sum += dy
+        x_sum -= dx
+        y_sum -= dy
 
 
     return (x_sum, y_sum)
