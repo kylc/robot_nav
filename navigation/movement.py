@@ -10,23 +10,26 @@ def contiguous_unknowns(wallmap, (x, y), max_range):
     is_cont = False
     start = end = None
 
-    # Trace out until we find an unkown or a wall
-    for i in xrange(1, max_range):
-        # Rotate around a full circle
-        for t in range(0, 360, 5):
+    # Rotate around a full circle
+    for t in range(0, 360, 5):
+        # Trace out until we find an unknown or a wall
+        for i in xrange(1, max_range):
             d = math.radians(t)
             (dx, dy) = (math.cos(d), math.sin(d))
 
             val = wallmap.get_value((int(round(x + dx * i)), int(round(y + dy * i))))
 
+            # If we find an unknown, set is_cont and mark the starting point
             if val == World.UNKNOWN:
-                # If !is_cont and found unknown, set is_cont and mark starting
-                # point
                 if not is_cont:
                     is_cont = True
                     start = (x + dx * i, y + dy * i)
-            elif val == World.OCCUPIED or val == World.EMPTY:
-                # If is_cont and found wall, set !is_cont and mark ending point
+
+                # We've found our goal, no need to search out further
+                break
+            # If we find a wall, set !is_cont and mark the ending point, then
+            # append the start/end pair to the list of unknowns
+            elif val == World.OCCUPIED:
                 if is_cont:
                     is_cont = False
 
@@ -36,6 +39,9 @@ def contiguous_unknowns(wallmap, (x, y), max_range):
                         (ex, ey) = end
                         if wallmap.is_within_bounds((sx, sy)) and wallmap.is_within_bounds((ex, ey)):
                             unknowns.append((int((sx + ex) / 2), int((sy + ey) / 2)))
+
+                # Don't try to look out beyond the wall
+                break
 
     return unknowns
 
