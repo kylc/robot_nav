@@ -46,14 +46,6 @@ def threat_distance(wallmap, (x, y), (dx, dy), max_range):
             return i
     return -1
 
-def repulsive_force((x0, y0), (xi, yi), const, dist, active, width):
-    """Return the magnitude and direction of the repulsive force for a given
-    cell."""
-    if not active:
-        return (0, 0)
-    f = const * width / dist
-    return ((xi - x0) * f, (yi - y0) * f)
-
 def next_move(wallmap, (x, y), max_range, targets):
     """Return the direction of the next move.  This is accomplished by summing
     all of the repulsive forces within the given max range."""
