@@ -63,8 +63,8 @@ def next_move(wallmap, (x, y), max_range, targets):
         (x_dir, y_dir) = (math.cos(d), math.sin(d))
         dist = threat_distance(wallmap, (x, y), (x_dir, y_dir), max_range)
         if dist != -1:
-            x_sum += dist * x_dir
-            y_sum += dist * y_dir
+            x_sum -= dist * x_dir
+            y_sum -= dist * y_dir
 
     # Attract to targets
 
@@ -72,8 +72,10 @@ def next_move(wallmap, (x, y), max_range, targets):
     # research.
     for (target_x, target_y) in targets:
         dx, dy = target_x - x, target_y - y
-        x_sum -= dx
-        y_sum -= dy
+
+        # TODO: Find the proper multiplier for goals
+        x_sum += 10 * dx
+        y_sum += 10 * dy
 
 
     return (x_sum, y_sum)
