@@ -1,4 +1,5 @@
 import math
+import navigation.world as world
 from navigation.world import World
 
 def dist((ax, ay), (bx, by)):
@@ -17,7 +18,7 @@ def contiguous_unknowns(wallmap, (x, y), max_range):
             d = math.radians(t)
             (dx, dy) = (math.cos(d), math.sin(d))
 
-            val = wallmap.get_value((int(round(x + dx * i)), int(round(y + dy * i))))
+            val = wallmap.get_value(world.nearest((x + dx * i, y + dy * i)))
 
             # If we find an unknown, set is_cont and mark the starting point
             if val == World.UNKNOWN:
@@ -38,7 +39,7 @@ def contiguous_unknowns(wallmap, (x, y), max_range):
                         (sx, sy) = start
                         (ex, ey) = end
                         if wallmap.is_within_bounds((sx, sy)) and wallmap.is_within_bounds((ex, ey)):
-                            unknowns.append((int((sx + ex) / 2), int((sy + ey) / 2)))
+                            unknowns.append(world.nearest(((sx + ex) / 2, ((sy + ey) / 2))))
 
                 # Don't try to look out beyond the wall
                 break
@@ -48,7 +49,7 @@ def contiguous_unknowns(wallmap, (x, y), max_range):
 def threat_distance(wallmap, (x, y), (dx, dy), max_range):
     """Return the distance to an obstacle in a given direction."""
     for i in xrange(1, max_range):
-        if wallmap.occupied((int(round(x + dx * i)), int(round(y + dy * i)))):
+        if wallmap.occupied(world.nearest((x + dx * i, y + dy * i))):
             return i
     return -1
 

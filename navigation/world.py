@@ -17,7 +17,6 @@ class World(object):
         self.width = width
         self.height = height
 
-
     def set_empty(self, (x, y)):
         self.data[x][y] = World.EMPTY
 
@@ -52,3 +51,6 @@ class World(object):
 
     def is_within_bounds(self, (x, y)):
         return x > 0 and x < self.width and y > 0 and y < self.height
+
+def nearest((x, y)):
+    return (int(round(x)), int(round(y)))
