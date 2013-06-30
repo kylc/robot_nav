@@ -1,31 +1,51 @@
 import numpy as np
-from scipy import ndimage
-from scipy.stats import threshold
-from skimage.graph import route_through_array
-from skimage.morphology import medial_axis
+from skimage import feature, graph
 
-def make_skeleton(data, mindist=15):
-    skel, distance = medial_axis(data, return_distance=True)
+TEMPLATE_CENTER_OFFSET = 1
+BASE_VERT_TEMPLATE = np.array([[0, 1, 0],
+                               [0, 1, 0],
+                               [0, 0, 0]])
+BASE_DIAG_TEMPLATE = np.array([[1, 0, 0],
+                               [0, 1, 0],
+                               [0, 0, 0]])
 
-    dist_on_skel = distance * skel
+def make_endpoint_templates():
+    """Return the endpoint matching template matricies."""
+    templates = []
 
-    # Filter the points too close to walls
-    dist_on_skel = threshold(dist_on_skel, threshmin=mindist, newval=-1)
+    for i in xrange(0, 4):
+        templates.append(np.rot90(BASE_VERT_TEMPLATE, k=i))
+        templates.append(np.rot90(BASE_DIAG_TEMPLATE, k=i))
 
-    return dist_on_skel
+    return templates
 
-def find_path(skeleton):
-    # TODO: Make these arguments
-    start = (139, 38)
-    end = (88, 430)
+def offset_template_point(p):
+    return p + TEMPLATE_CENTER_OFFSET
 
-    path, cost = route_through_array(skeleton, start, end, fully_connected=True)
-    path = np.asarray(path)
+def find_endpoints(skel):
+    """Return all matched endpoints in the image."""
+    endpoints = []
 
-    # TODO: Why are the coordinates flipped?
-    # TODO: numpy probably has some kind of rot90 function...
-    for i in range(len(path)):
-        (x, y) = path[i]
-        path[i] = (y, x)
+    for template in make_endpoint_templates():
+        matches = feature.match_template(skel, template)
 
-    return path
+        # Filter to only those that match with an 80% probability
+        matches = np.where(matches > 0.80)
+
+        # skimage matches on the top left of the template, so shift it to the
+        # center point
+        matches = map(offset_template_point, matches)
+
+        endpoints.extend(zip(*matches))
+
+    return endpoints
+
+def find_path(start, end, skel):
+        # TODO: Why do matplotlib/skimage not agree on array shapes?
+        route, cost = graph.route_through_array(skel,
+                [start[1], start[0]],
+                [end[0], end[1]],
+                fully_connected=True)
+        ys, xs = zip(*route)
+
+        return [xs, ys]
