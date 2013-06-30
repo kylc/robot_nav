@@ -1,10 +1,9 @@
 import sys
 from random import choice
+import numpy as np
 import matplotlib.pyplot as plt
 from image_loader import load_image
 from navigation import movement, skeleton
-
-colors = ['b', 'g', 'r', 'c', 'm', 'y']
 
 # Load the image
 data = load_image(sys.argv[1])
@@ -23,7 +22,7 @@ endpoints = movement.find_endpoints(skel)
 print "Finding paths..."
 startpoint = (1, 132)
 for endpoint in endpoints:
-    color = choice(colors)
+    color = np.random.rand(3)
 
     plt.plot(endpoint[1], endpoint[0], color=color, marker='o')
 
