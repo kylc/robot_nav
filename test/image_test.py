@@ -22,7 +22,9 @@ endpoints = movement.find_endpoints(skel)
 
 print "Finding paths..."
 start = (1, 132)
+
 paths = movement.find_all_paths(start, skel)
+closest_path = movement.find_closest_path(start, paths)
 
 print "Plotting!"
 for path in paths:
@@ -33,6 +35,6 @@ for path in paths:
     plt.plot(path.end[1], path.end[0], color=color, marker='o')
     plt.plot(path.path[0], path.path[1], color=color, marker=',')
 
-
+plt.plot(closest_path.path[0], closest_path.path[1], color='r', linewidth=5)
 
 plt.show()

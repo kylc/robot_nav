@@ -11,10 +11,11 @@ BASE_DIAG_TEMPLATE = np.array([[1, 0, 0],
                                [0, 0, 0]])
 
 class Path:
-    def __init__(self, start, end, path):
+    def __init__(self, start, end, path, cost):
         self.start = start
         self.end = end
         self.path = path
+        self.cost = cost
 
 def make_endpoint_templates():
     """Return the endpoint matching template matricies."""
@@ -57,16 +58,19 @@ def find_path(start, end, skel):
     ys, xs = zip(*route)
     xs, ys = np.asarray(xs), np.asarray(ys)
 
-    return [xs, ys]
+    return xs, ys, cost
 
 def find_all_paths(start, skel):
     paths = []
 
     endpoints = find_endpoints(skel)
     for endpoint in endpoints:
-        xs, ys = movement.find_path(start, endpoint, skel)
+        xs, ys, cost = movement.find_path(start, endpoint, skel)
 
-        path = Path(start, endpoint, [xs, ys])
+        path = Path(start, endpoint, [xs, ys], cost)
         paths.append(path)
 
     return paths
+
+def find_closest_path(start, paths):
+    return sorted(paths, key=lambda path: path.cost)[0]
