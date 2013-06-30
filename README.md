@@ -20,3 +20,8 @@ obstacles.  Sum them with the attracting force of the target unknowns.
 
 4. If the final target is found, traverse the tree directly back to the root
    node.
+
+Example
+-------
+
+![example](assets/figure_1.png)
