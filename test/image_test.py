@@ -6,6 +6,7 @@ from image_loader import load_image
 from navigation import movement, skeleton
 
 # Load the image
+print "Loading image..."
 data = load_image(sys.argv[1])
 
 print "Generating skeleton..."
@@ -31,5 +32,6 @@ for endpoint in endpoints:
     xs, ys = movement.find_path(startpoint, endpoint, skel)
     plt.plot(xs, ys, color=color, marker=',')
 
+print "Plotting!"
 
 plt.show()
