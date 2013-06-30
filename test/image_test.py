@@ -21,17 +21,18 @@ print "Finding endpoints..."
 endpoints = movement.find_endpoints(skel)
 
 print "Finding paths..."
-startpoint = (1, 132)
-for endpoint in endpoints:
-    color = np.random.rand(3)
-
-    plt.plot(endpoint[1], endpoint[0], color=color, marker='o')
-
-    print "Finding path from: ", startpoint, " to: ", endpoint
-
-    xs, ys = movement.find_path(startpoint, endpoint, skel)
-    plt.plot(xs, ys, color=color, marker=',')
+start = (1, 132)
+paths = movement.find_all_paths(start, skel)
 
 print "Plotting!"
+for path in paths:
+    color = np.random.rand(3)
+
+    xs, ys = path.path
+
+    plt.plot(path.end[1], path.end[0], color=color, marker='o')
+    plt.plot(path.path[0], path.path[1], color=color, marker=',')
+
+
 
 plt.show()

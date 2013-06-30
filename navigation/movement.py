@@ -1,5 +1,6 @@
 import numpy as np
 from skimage import feature, graph
+import movement
 
 TEMPLATE_CENTER_OFFSET = 1
 BASE_VERT_TEMPLATE = np.array([[0, 1, 0],
@@ -8,6 +9,12 @@ BASE_VERT_TEMPLATE = np.array([[0, 1, 0],
 BASE_DIAG_TEMPLATE = np.array([[1, 0, 0],
                                [0, 1, 0],
                                [0, 0, 0]])
+
+class Path:
+    def __init__(self, start, end, path):
+        self.start = start
+        self.end = end
+        self.path = path
 
 def make_endpoint_templates():
     """Return the endpoint matching template matricies."""
@@ -41,11 +48,25 @@ def find_endpoints(skel):
     return endpoints
 
 def find_path(start, end, skel):
-        # TODO: Why do matplotlib/skimage not agree on array shapes?
-        route, cost = graph.route_through_array(skel,
-                [start[1], start[0]],
-                [end[0], end[1]],
-                fully_connected=True)
-        ys, xs = zip(*route)
+    """Find the shortest path along the skeleton from point to point."""
+    # TODO: Why do matplotlib/skimage not agree on array shapes?
+    route, cost = graph.route_through_array(skel,
+            [start[1], start[0]],
+            [end[0], end[1]],
+            fully_connected=True)
+    ys, xs = zip(*route)
+    xs, ys = np.asarray(xs), np.asarray(ys)
 
-        return [xs, ys]
+    return [xs, ys]
+
+def find_all_paths(start, skel):
+    paths = []
+
+    endpoints = find_endpoints(skel)
+    for endpoint in endpoints:
+        xs, ys = movement.find_path(start, endpoint, skel)
+
+        path = Path(start, endpoint, [xs, ys])
+        paths.append(path)
+
+    return paths
