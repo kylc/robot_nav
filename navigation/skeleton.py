@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 from skimage import morphology
 
-def make_skeleton(image, mindist=15):
+def make_skeleton(image, mindist):
     skel, distance = morphology.medial_axis(image, return_distance=True)
 
     dist_on_skel = distance * skel
