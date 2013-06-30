@@ -28,12 +28,9 @@ for endpoint in endpoints:
     plt.plot(endpoint[1], endpoint[0], color=color, marker='o')
 
     print "Finding path from: ", startpoint, " to: ", endpoint
-    try:
-        xs, ys = movement.find_path(startpoint, endpoint, skel)
-        plt.plot(xs, ys, color=color, marker=',')
-    except ValueError:
-        # No route found
-        pass
+
+    xs, ys = movement.find_path(startpoint, endpoint, skel)
+    plt.plot(xs, ys, color=color, marker=',')
 
 
 plt.show()
