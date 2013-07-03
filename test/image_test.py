@@ -17,9 +17,6 @@ plt.figure()
 plt.imshow(data, cmap=plt.cm.gray, interpolation='nearest')
 
 # Compute the paths
-print "Finding endpoints..."
-endpoints = movement.find_endpoints(skel)
-
 print "Finding paths..."
 start = (1, 132)
 
