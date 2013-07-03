@@ -72,5 +72,6 @@ def find_all_paths(start, skel):
 
     return paths
 
-def find_closest_path(start, paths):
+def find_closest_path(start, paths, visited=[]):
+    paths = filter(lambda path: path.end not in visited, paths)
     return sorted(paths, key=lambda path: path.cost)[0]
