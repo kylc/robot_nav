@@ -2,3 +2,4 @@ pil
 numpy
 scipy
 scikit-image
+pygame

@@ -1,7 +1,8 @@
 import sys
 from random import choice
+import pygame
 import numpy as np
-import matplotlib.pyplot as plt
+
 from image_loader import load_image
 from navigation import movement, skeleton
 
@@ -12,26 +13,47 @@ data = load_image(sys.argv[1])
 print "Generating skeleton..."
 skel = skeleton.make_skeleton(data, mindist=10)
 
-# Draw!
-plt.figure()
-plt.imshow(data, cmap=plt.cm.gray, interpolation='nearest')
-
 # Compute the paths
 print "Finding paths..."
-start = (1, 132)
+location = (1, 132)
 
-paths = movement.find_all_paths(start, skel)
-closest_path = movement.find_closest_path(start, paths)
+paths = movement.find_all_paths(location, skel)
 
-print "Plotting!"
-for path in paths:
-    color = np.random.rand(3)
+EMPTY_COLOR = (255, 255, 255)
+OBSTACLE_COLOR = (0, 0, 0)
+ROBOT_COLOR = (255, 0, 0,)
 
-    xs, ys = path.path
+def draw_image(screen, img):
+    for (y, x), v in np.ndenumerate(img):
+        screen.fill((v, v, v), rect=(x, y, 1, 1))
 
-    plt.plot(path.end[1], path.end[0], color=color, marker='o')
-    plt.plot(path.path[0], path.path[1], color=color, marker=',')
+pygame.init()
+screen = pygame.display.set_mode((data.shape[1], data.shape[0]))
 
-plt.plot(closest_path.path[0], closest_path.path[1], color='r', linewidth=5)
+background = pygame.Surface(screen.get_size())
+background = background.convert()
+draw_image(background, data)
 
-plt.show()
+clock = pygame.time.Clock()
+while True:
+    clock.tick(5)
+
+    screen.blit(background, (0, 0))
+
+    # Draw the robot
+    locx, locy = location
+    screen.fill(ROBOT_COLOR, rect=(locx - 5, locy - 5, 10, 10))
+
+    closest_path = movement.find_closest_path(location, paths)
+    print "Location:", location
+    print "PathL:", zip(*closest_path.path)
+    path_as_points = zip(*closest_path.path)
+    for idx, point in enumerate(path_as_points):
+        # If this is our current location in the path, move to the next point
+        if location == point:
+            print "found match at", idx
+            location = path_as_points[idx + 1]
+            break
+
+    pygame.display.flip()
+    print "Tick!"
