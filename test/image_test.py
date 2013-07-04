@@ -17,9 +17,6 @@ plt.figure()
 plt.imshow(data, cmap=plt.cm.gray, interpolation='nearest')
 
 # Compute the paths
-print "Finding endpoints..."
-endpoints = movement.find_endpoints(skel)
-
 print "Finding paths..."
 start = (1, 132)
 
@@ -29,8 +26,6 @@ closest_path = movement.find_closest_path(start, paths)
 print "Plotting!"
 for path in paths:
     color = np.random.rand(3)
-
-    xs, ys = path.points
 
     plt.plot(*path.end, color=color, marker='o')
     plt.plot(*path.points, color=color, marker=',')
