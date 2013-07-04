@@ -36,11 +36,11 @@ class Navigator:
     def regenerate_paths(self):
         self.paths = find_all_paths(self.location, self.skel)
 
-    def next_move(self):
+    def advance(self, step=1):
         closest_path = find_closest_path(self.location, self.paths, self.visited)
 
         # Move to the next location along the path
-        self.location = closest_path.advance(self.location, n=1)
+        self.location = closest_path.advance(self.location, n=step)
 
         # If we have reached the end, mark the point as visited
         if self.location == closest_path.end:

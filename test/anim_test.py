@@ -42,6 +42,6 @@ while True:
     screen.fill(ROBOT_COLOR, rect=(location[0] - 5, location[1] - 5, 10, 10))
 
     # Calculate the next move
-    location = navigator.next_move()
+    location = navigator.advance(step=1)
 
     pygame.display.flip()
