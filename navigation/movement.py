@@ -20,6 +20,18 @@ class Path:
     def as_tuples(self):
         return zip(*self.points)
 
+    def advance(self, current, n=1):
+        path_as_points = self.as_tuples()
+
+        for idx, point in enumerate(path_as_points):
+            # If this is our current location in the path, move to the next point
+            if current == point:
+                # If there are any more points in the path, move to them
+                if len(path_as_points) > idx + n:
+                    return path_as_points[idx + n]
+                else:
+                    return path_as_points[-1]
+
 def make_endpoint_templates():
     """Return the endpoint matching template matricies."""
     templates = []

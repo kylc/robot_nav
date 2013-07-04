@@ -49,29 +49,14 @@ while True:
 
     closest_path = movement.find_closest_path(location, paths, visited)
 
-    path_as_points = closest_path.as_tuples()
-    for idx, point in enumerate(path_as_points):
-        # If this is our current location in the path, move to the next point
-        if location == point:
-            # If there are any more points in the path, move to them
-            if len(path_as_points) > idx + 1:
-                location = path_as_points[idx + 1]
+    # Move to the next location along the path
+    location = closest_path.advance(location, n=1)
 
-                # Draw the vector
-                if len(path_as_points) > idx + 10:
-                    vec_end = path_as_points[idx + 10]
-                else:
-                    vec_end = path_as_points[-1]
+    # If we have reached the end, mark the point as visited
+    if location == closest_path.end:
+        visited.append(closest_path.end)
 
-                pygame.draw.aaline(screen, (0, 255, 0), location, vec_end)
-
-                break
-            # If this is the end, we've now visited the endpoint, so mark it as
-            # so
-            else:
-                visited.append((location[1], location[0]))
-
-                # Now figure out how to get to all the other endpoints
-                paths = movement.find_all_paths(location, skel)
+        # Now figure out how to get to all the other endpoints
+        paths = movement.find_all_paths(location, skel)
 
     pygame.display.flip()
