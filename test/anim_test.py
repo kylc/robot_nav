@@ -49,7 +49,7 @@ while True:
 
     closest_path = movement.find_closest_path(location, paths, visited)
 
-    path_as_points = zip(*closest_path.path)
+    path_as_points = closest_path.as_tuples()
     for idx, point in enumerate(path_as_points):
         # If this is our current location in the path, move to the next point
         if location == point:

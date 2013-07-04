@@ -11,11 +11,14 @@ BASE_DIAG_TEMPLATE = np.array([[1, 0, 0],
                                [0, 0, 0]])
 
 class Path:
-    def __init__(self, start, end, path, cost):
+    def __init__(self, start, end, points, cost):
         self.start = start
         self.end = end
-        self.path = path
+        self.points = points
         self.cost = cost
+
+    def as_tuples(self):
+        return zip(*self.points)
 
 def make_endpoint_templates():
     """Return the endpoint matching template matricies."""
