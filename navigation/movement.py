@@ -1,5 +1,6 @@
 import numpy as np
 from skimage import graph
+
 import skeleton
 
 class Path:
@@ -23,6 +24,32 @@ class Path:
                     return path_as_points[idx + n]
                 else:
                     return path_as_points[-1]
+
+class Navigator:
+    def __init__(self, start, skel):
+        self.location = start
+        self.visited = []
+        self.skel = skel
+
+        self.regenerate_paths()
+
+    def regenerate_paths(self):
+        self.paths = find_all_paths(self.location, self.skel)
+
+    def next_move(self):
+        closest_path = find_closest_path(self.location, self.paths, self.visited)
+
+        # Move to the next location along the path
+        self.location = closest_path.advance(self.location, n=1)
+
+        # If we have reached the end, mark the point as visited
+        if self.location == closest_path.end:
+            self.visited.append(closest_path.end)
+
+            # Now figure out how to get to all the other endpoints
+            self.regenerate_paths()
+
+        return self.location
 
 def find_path(start, end, skel):
     """Find the shortest path along the skeleton from point to point."""

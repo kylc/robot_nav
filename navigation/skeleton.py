@@ -10,7 +10,6 @@ BASE_DIAG_TEMPLATE = np.array([[1, 0, 0],
                                [0, 1, 0],
                                [0, 0, 0]])
 
-
 def make_skeleton(image, mindist):
     skel, distance = morphology.medial_axis(image, return_distance=True)
 
