@@ -11,6 +11,7 @@ BASE_DIAG_TEMPLATE = np.array([[1, 0, 0],
                                [0, 0, 0]])
 
 def make_skeleton(image, mindist):
+    """Return a skeletonization of the image, filtered and normalized."""
     skel, distance = morphology.medial_axis(image, return_distance=True)
 
     dist_on_skel = distance * skel
@@ -20,9 +21,9 @@ def make_skeleton(image, mindist):
 
     return normalized
 
-def filter_skeleton_distances(dist_on_skel, mindist=10):
-    # Threshold values too close to walls to -1
-    return stats.threshold(dist_on_skel, threshmin=mindist, newval=-1)
+def filter_skeleton_distances(dist_on_skel, mindist=10, newval=-1):
+    """Threshold values too close to obstacles to a new value."""
+    return stats.threshold(dist_on_skel, threshmin=mindist, newval=newval)
 
 def normalize_skeleton(dist_on_skel):
     """Return the skeleton with all values normalized to 1."""
