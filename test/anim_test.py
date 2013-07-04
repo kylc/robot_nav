@@ -56,6 +56,15 @@ while True:
             # If there are any more points in the path, move to them
             if len(path_as_points) > idx + 1:
                 location = path_as_points[idx + 1]
+
+                # Draw the vector
+                if len(path_as_points) > idx + 10:
+                    vec_end = path_as_points[idx + 10]
+                else:
+                    vec_end = path_as_points[-1]
+
+                pygame.draw.aaline(screen, (0, 255, 0), location, vec_end)
+
                 break
             # If this is the end, we've now visited the endpoint, so mark it as
             # so
