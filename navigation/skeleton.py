@@ -2,6 +2,8 @@ import numpy as np
 from scipy import stats
 from skimage import feature, morphology
 
+import util
+
 TEMPLATE_CENTER_OFFSET = 1
 BASE_VERT_TEMPLATE = np.array([[0, 1, 0],
                                [0, 1, 0],
@@ -42,9 +44,6 @@ def make_endpoint_templates():
 def offset_template_point(p):
     return p + TEMPLATE_CENTER_OFFSET
 
-def swap_axes((x, y)):
-    return (y, x)
-
 def find_endpoints(skel):
     """Return all matched endpoints in the image."""
     endpoints = []
@@ -59,6 +58,6 @@ def find_endpoints(skel):
         # center point
         matches = map(offset_template_point, matches)
 
-        endpoints.extend(map(swap_axes, zip(*matches)))
+        endpoints.extend(map(util.swap_axes, zip(*matches)))
 
     return endpoints
