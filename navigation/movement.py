@@ -33,6 +33,9 @@ def make_endpoint_templates():
 def offset_template_point(p):
     return p + TEMPLATE_CENTER_OFFSET
 
+def swap_axes((x, y)):
+    return (y, x)
+
 def find_endpoints(skel):
     """Return all matched endpoints in the image."""
     endpoints = []
@@ -47,7 +50,7 @@ def find_endpoints(skel):
         # center point
         matches = map(offset_template_point, matches)
 
-        endpoints.extend(zip(*matches))
+        endpoints.extend(map(swap_axes, zip(*matches)))
 
     return endpoints
 
@@ -56,7 +59,7 @@ def find_path(start, end, skel):
     # TODO: Why do matplotlib/skimage not agree on array shapes?
     route, cost = graph.route_through_array(skel,
             [start[1], start[0]],
-            [end[0], end[1]],
+            [end[1], end[0]],
             fully_connected=True)
     ys, xs = zip(*route)
     xs, ys = np.asarray(xs), np.asarray(ys)

@@ -30,11 +30,11 @@ print "Plotting!"
 for path in paths:
     color = np.random.rand(3)
 
-    xs, ys = path.path
+    xs, ys = path.points
 
-    plt.plot(path.end[1], path.end[0], color=color, marker='o')
-    plt.plot(path.path[0], path.path[1], color=color, marker=',')
+    plt.plot(*path.end, color=color, marker='o')
+    plt.plot(*path.points, color=color, marker=',')
 
-plt.plot(closest_path.path[0], closest_path.path[1], color='r', linewidth=5)
+plt.plot(closest_path.points[0], closest_path.points[1], color='r', linewidth=5)
 
 plt.show()
