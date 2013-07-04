@@ -35,6 +35,6 @@ for path in paths:
     plt.plot(*path.end, color=color, marker='o')
     plt.plot(*path.points, color=color, marker=',')
 
-plt.plot(closest_path.points[0], closest_path.points[1], color='r', linewidth=5)
+plt.plot(*closest_path.points, color='r', linewidth=5)
 
 plt.show()
