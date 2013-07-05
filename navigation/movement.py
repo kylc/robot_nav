@@ -34,10 +34,10 @@ class Navigator:
         self.regenerate_paths()
 
     def regenerate_paths(self):
-        self.paths = find_all_paths(self.location, self.skel)
+        self.paths = find_all_paths(self.location, self.skel, omit=self.visited)
 
     def advance(self, step=1):
-        closest_path = find_closest_path(self.location, self.paths, self.visited)
+        closest_path = find_closest_path(self.location, self.paths)
 
         # Move to the next location along the path
         self.location = closest_path.advance(self.location, n=step)
@@ -63,11 +63,11 @@ def find_path(start, end, skel):
 
     return xs, ys, cost
 
-def find_all_paths(start, skel):
+def find_all_paths(start, skel, omit=[]):
     paths = []
 
     endpoints = skeleton.find_endpoints(skel)
-    for endpoint in endpoints:
+    for endpoint in filter(lambda e: not e in omit, endpoints):
         xs, ys, cost = find_path(start, endpoint, skel)
 
         path = Path(start, endpoint, [xs, ys], cost)
@@ -75,6 +75,5 @@ def find_all_paths(start, skel):
 
     return paths
 
-def find_closest_path(start, paths, visited=[]):
-    paths = filter(lambda path: path.end not in visited, paths)
+def find_closest_path(start, paths):
     return sorted(paths, key=lambda path: path.cost)[0]
