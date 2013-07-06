@@ -53,6 +53,11 @@ class Navigator:
 
 def find_path(start, end, skel):
     """Find the shortest path along the skeleton from point to point."""
+    # route_through_array treats zeros as having zero cost.  In our case, zeros
+    # are points off the path.  Mark them as -1 so route_through_array ignores
+    # them.
+    skel = np.where(skel > 0, 1, -1)
+
     # TODO: Why do matplotlib/skimage not agree on array shapes?
     route, cost = graph.route_through_array(skel,
             [start[1], start[0]],
