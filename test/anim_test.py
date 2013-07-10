@@ -17,7 +17,7 @@ ROBOT_COLOR = (255, 0, 0,)
 
 def draw_image(screen, img):
     for (y, x), v in np.ndenumerate(img):
-        screen.fill((v, v, v), rect=(x, y, 1, 1))
+        screen.set_at((x, y), (v, v, v))
 
 # Set up pygame
 pygame.init()
